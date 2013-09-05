@@ -5,7 +5,9 @@ import com.google.caliper.Param;
 
 /**
  * This test shows that having try-catch and no-try-catch are approximately the same in speed.
- * It also shows that integer division is much slower than catching an exception.
+ * It also shows that integer division made in conditional operator is much slower than catching an exception.
+ *
+ * There is no cpu difference because of error percentage, so there should be no difference in whether we have try-catch or we don't have it.
  */
 public class TryCatchMicrobe {
     public static void main(String[] args) {
