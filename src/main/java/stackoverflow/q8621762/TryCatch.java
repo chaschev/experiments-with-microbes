@@ -37,7 +37,6 @@ public class TryCatch {
                 for (int i = 0; i < reps; i++) {
                     try {
                         obj.i = i / (i % n < m ? 0 : 1);
-                        throw new Exception("" + i);
                     } catch (Exception e) {
                         errorCount++;
                     }
@@ -60,6 +59,6 @@ public class TryCatch {
     }
 
     public static void main(String[] args) {
-        CaliperMain.main(Microbe1.class, "-p -i runtime -Dm=50,1".split("\\s+"));
+        CaliperMain.main(Microbe1.class, "-p -i runtime -Dm=90,1".split("\\s+"));
     }
 }
