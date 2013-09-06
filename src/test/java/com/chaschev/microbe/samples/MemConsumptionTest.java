@@ -5,6 +5,7 @@ package com.chaschev.microbe.samples;
 
 import com.chaschev.microbe.*;
 import gnu.trove.list.array.TIntArrayList;
+import gnu.trove.map.hash.TIntIntHashMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -18,11 +19,11 @@ import java.util.*;
  */
 
 
-public class MemConsuptionTest {
-    public static final Logger logger = LoggerFactory.getLogger(MemConsuptionTest.class);
+public class MemConsumptionTest {
+    public static final Logger logger = LoggerFactory.getLogger(MemConsumptionTest.class);
 
     public static void main(String[] args) {
-        MemConsuptionTest mem = new MemConsuptionTest();
+        MemConsumptionTest mem = new MemConsumptionTest();
 
         mem.arrayListVsLinkedList();
 //        mem.testStringMemoryConsumption();
@@ -41,7 +42,7 @@ public class MemConsuptionTest {
         new Microbe(numberOfTrials, "testStringMemoryConsumption", new TrialFactory() {
             @Override
             public Microbe.Trial create(final int trialIndex) {
-                return new Microbe.AbstractTrial() {
+                return new AbstractTrial() {
                     int n = 5000;
                     String[] holder = new String[n];
                     int lFrom = 1500;
@@ -273,28 +274,26 @@ public class MemConsuptionTest {
 
 
     public void testMapsMemoryConsumption() {
-        System.out.println("TIntIntHashMap");
-
         //231561 = 9000 * (8 + 21)
-//        new Microbe(50,
-//                new MemConsumptionTrialFactory<TIntIntHashMap>(
-//                        new ObjectFactory<TIntIntHashMap>() {
-//                            @Override
-//                            public TIntIntHashMap create(int trialIndex) {
-//                                TIntIntHashMap map = new TIntIntHashMap();
-//
-//                                for (int i = trialIndex; i < trialIndex + 9000; i++) {
-//                                    map.put(i, i * i + trialIndex);
-//                                }
-//
-//                                return map;
-//                            }
-//                        },
-//                        TIntIntHashMap.class, 50)
-//        ).runTrials();
+        new Microbe(50, "TIntIntHashMap",
+                new MemConsumptionTrialFactory<TIntIntHashMap>(
+                        new ObjectFactory<TIntIntHashMap>() {
+                            @Override
+                            public TIntIntHashMap create(int trialIndex) {
+                                TIntIntHashMap map = new TIntIntHashMap();
+
+                                for (int i = trialIndex; i < trialIndex + 9000; i++) {
+                                    map.put(i, i * i + trialIndex);
+                                }
+
+                                return map;
+                            }
+                        },
+                        TIntIntHashMap.class, 50)
+        ).runTrials();
 
         //567338
-        new Microbe(50,"HashMap<Integer, Integer>",
+        new Microbe(50, "HashMap<Integer, Integer>",
                 new MemConsumptionTrialFactory<Map>(
                         new ObjectFactory<Map>() {
                             @Override

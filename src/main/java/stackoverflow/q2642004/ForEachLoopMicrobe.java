@@ -2,10 +2,6 @@ package stackoverflow.q2642004;
 
 import com.chaschev.microbe.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 /**
  * In all four cases for-each is 2-3 times faster.
  */
@@ -42,21 +38,12 @@ public class ForEachLoopMicrobe {
             }
         }
 
-        final Microbe.AbstractTrial trial = new Microbe.AbstractTrial() {
-            List<Foo> integers = new ArrayList<Foo>(elementCount);
-
+        final AbstractTrial trial = new RandomArrayListTrial<Foo>(elementCount) {
             @Override
-            public Microbe.Trial prepare() {
-                integers.clear();
-
-                final Random r = new Random();
-
-                for(int i = 0;i<elementCount;i++){
-                    integers.add(new Foo(r.nextInt()));
-                }
-
-                return this;
+            protected Foo createNew(int i) {
+                return new Foo(random.nextInt());
             }
+
 
             @SuppressWarnings("ForLoopReplaceableByForEach")
             @Override
@@ -65,14 +52,14 @@ public class ForEachLoopMicrobe {
                 long sum = 0;
 
                 if(useForEach){
-                    for (Foo f : integers) {
+                    for (Foo f : arrayList) {
                         sum += f.v;
                     }
                 }else{
-                    final int size = integers.size();
+                    final int size = arrayList.size();
 
                     for (int j = 0; j < size; j++) {
-                        sum += integers.get(j).v;
+                        sum += arrayList.get(j).v;
                     }
                 }
 
