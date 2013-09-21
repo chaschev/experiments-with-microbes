@@ -11,7 +11,12 @@ import com.google.caliper.Param;
  */
 public class TryCatchMicrobe {
     public static void main(String[] args) {
+        new TryCatchMicrobe(0, 100, true).run();
+        new TryCatchMicrobe(0, 100, false).run();
         new TryCatchMicrobe(1, 100, true).run();
+        new TryCatchMicrobe(1, 100, false).run();
+        new TryCatchMicrobe(10, 100, true).run();
+        new TryCatchMicrobe(10, 100, false).run();
         new TryCatchMicrobe(90, 100, true).run();
         new TryCatchMicrobe(90, 100, false).run();
     }
@@ -65,7 +70,7 @@ public class TryCatchMicrobe {
                     System.out.println(obj.i);
                 }
 
-                return new MeasurementsImpl();
+                return MeasurementsImpl.EMPTY;
             }
 
             @Override
@@ -76,12 +81,13 @@ public class TryCatchMicrobe {
 
         System.out.println(this);
 
-        Microbe.newMicroCpu("tryCatch", 200000, new TrialFactory() {
+        Microbe.newMicroCpu("tryCatch", 5000000, new TrialFactory() {
             @Override
             public Microbe.Trial create(int trialIndex) {
                 return trial;
             }
-        }).setWarmUpTrials(400000)
+        }).setWarmUpTrials(5000000)
+            .noSort()
             .runTrials();
     }
 
