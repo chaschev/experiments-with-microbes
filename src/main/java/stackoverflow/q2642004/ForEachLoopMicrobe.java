@@ -2,6 +2,8 @@ package stackoverflow.q2642004;
 
 import com.chaschev.microbe.*;
 
+import java.util.Random;
+
 /**
  * In all four cases for-each is 2-3 times faster.
  */
@@ -13,11 +15,11 @@ public class ForEachLoopMicrobe {
         new ForEachLoopMicrobe(10000, true).run(20000, 40000);
         new ForEachLoopMicrobe(10000, false).run(20000, 40000);
 
-        new ForEachLoopMicrobe(100, true).run(20000, 40000);
-        new ForEachLoopMicrobe(100, false).run(20000, 40000);
+        new ForEachLoopMicrobe(100, true).run(80000, 160000);
+        new ForEachLoopMicrobe(100, false).run(80000, 160000);
 
-        new ForEachLoopMicrobe(10, true).run(200000, 400000);
-        new ForEachLoopMicrobe(10, false).run(200000, 400000);
+        new ForEachLoopMicrobe(10, true).run(800000, 1600000);
+        new ForEachLoopMicrobe(10, false).run(800000, 1600000);
     }
 
     int elementCount;
@@ -39,6 +41,12 @@ public class ForEachLoopMicrobe {
         }
 
         final AbstractTrial trial = new RandomArrayListTrial<Foo>(elementCount) {
+            long r;
+
+            {
+                random = new Random(6);
+            }
+
             @Override
             protected Foo createNew(int i) {
                 return new Foo(random.nextInt());
@@ -52,25 +60,28 @@ public class ForEachLoopMicrobe {
                 long sum = 0;
 
                 if(useForEach){
+                    int j = 0;
                     for (Foo f : arrayList) {
-                        sum += f.v;
+                        sum += f.v * i * j;
+                        j++;
                     }
                 }else{
                     final int size = arrayList.size();
 
                     for (int j = 0; j < size; j++) {
-                        sum += arrayList.get(j).v;
+                        sum += arrayList.get(j).v * i * j;
                     }
                 }
 
-                if(sum % 293829381 == 1){
-                    System.out.println(sum);
-                }
+                r = sum;
 
-
-                return new MeasurementsImpl();
+                return MeasurementsImpl.EMPTY;
             }
 
+            @Override
+            public void addResultsAfterCompletion(Measurements result) {
+                result.add(new Value(r % 10000, "checksum"));
+            }
         };
 
         System.out.println(this);
