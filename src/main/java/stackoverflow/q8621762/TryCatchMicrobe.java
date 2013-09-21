@@ -38,7 +38,7 @@ public class TryCatchMicrobe {
 
         final Foo obj = new Foo();
 
-        final Microbe.AbstractTrial trial = new Microbe.AbstractTrial() {
+        final AbstractTrial trial = new AbstractTrial() {
             int errorCount = 0;
 
             @Override
