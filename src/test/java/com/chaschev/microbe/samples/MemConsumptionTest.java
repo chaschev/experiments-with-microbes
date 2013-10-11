@@ -183,7 +183,7 @@ public class MemConsumptionTest {
     }
 
     public void arrayListVsLinkedList() {
-        final int listSize = 50000;
+        final int listSize = 20000;
 
         //2003K, 25.4s
         new Microbe(20,"linkedList",
@@ -219,7 +219,7 @@ public class MemConsumptionTest {
                 new ObjectFactory<List>() {
                     @Override
                     public List create(int trialIndex) {
-                        List<Integer> integers = new ArrayList<Integer>();
+                        List<Integer> integers = new ArrayList<Integer>(listSize);
 
                         for (int i = trialIndex; i < trialIndex + listSize; i++) {
                             integers.add(i * i + trialIndex);
@@ -249,7 +249,7 @@ public class MemConsumptionTest {
                 new ObjectFactory<TIntArrayList>() {
                     @Override
                     public TIntArrayList create(int trialIndex) {
-                        TIntArrayList integers = new TIntArrayList();
+                        TIntArrayList integers = new TIntArrayList(listSize);
 
                         for (int i = trialIndex; i < trialIndex + listSize; i++) {
                             integers.add(i * i + trialIndex);
